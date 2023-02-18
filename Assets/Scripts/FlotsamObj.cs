@@ -4,14 +4,15 @@ using UnityEngine;
 
 namespace ML
 {
+    [RequireComponent(typeof(Rigidbody))]
     public class FlotsamObj : MonoBehaviour
     {
         private VoxelCollector _voxelCollector;
         private Rigidbody _rigidbody;
         private bool _inWater;
         private Water _water;
-        [SerializeField]
-        private float _voxelSize=0.2f;
+        [SerializeField] private float _voxelSize = 0.2f;
+
         private void Awake()
         {
             _voxelCollector = GetComponentInChildren<VoxelCollector>();
@@ -27,16 +28,26 @@ namespace ML
                 for (int i = 0; i < voxelCount; i++)
                 {
                     var voxel = _voxelCollector.Voxels[i];
-                    float deep = _water.GetWaterLine(voxel.position) - voxel.transform.position.y+_voxelSize;
-                    if (deep > 0)
+                    var voxelPosition = voxel.transform.position;
+                    var voxelVelocity = _rigidbody.GetPointVelocity(voxelPosition);
+                    var voxelVelocityNor = voxelVelocity.normalized;
+                    var voxelVelocitySqrMag = voxelVelocity.sqrMagnitude;
+                    float depth = _water.GetWaterLine(voxel.position) - voxelPosition.y + _voxelSize;
+                    if (depth > 0)
                     {
-                        _rigidbody.AddForceAtPosition((Vector3.up * deep * buyancy) * -Physics.gravity.y, voxel.position,
+                        //计算在水中的阻力
+                        _rigidbody.AddForceAtPosition(-1 * 0.5f * voxelVelocitySqrMag * _water.Drag * voxelVelocityNor,
+                            voxel.position, ForceMode.Acceleration);
+                        //计算浮力
+                        //计算水下体积 TODO:未来会计算真实体积，目前先只算高度
+                        float volumeInWater = Mathf.Clamp(depth, 0, _voxelSize);
+                        _rigidbody.AddForceAtPosition((Vector3.up * volumeInWater * buyancy) * -Physics.gravity.y,
+                            voxel.position,
                             ForceMode.Acceleration);
-                        // _rigidbody.AddForceAtPosition(Vector3.up*(WaterLift / _voxels.Count)*deep*-_gravity,v.position,ForceMode.Acceleration);                    }
                     }
                 }
-                    
             }
+
             _inWater = false;
         }
 

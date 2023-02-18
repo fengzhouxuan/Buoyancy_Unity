@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ML
@@ -8,17 +5,21 @@ namespace ML
     public class Water : MonoBehaviour
     {
         [SerializeField]
-        private float _buoyancy = 6;
-        private float _waterLine;
+        private float _buoyancy = 4;
+
+        [SerializeField] private float _drag = 0.5f;
+        [SerializeField]
+        private float _speed=1;
+        [SerializeField]
+        private float _wave=1;
+        [SerializeField]
+        private float _height=0.4f;
+        
         private Transform _transform;
-        [SerializeField]
-        private float _speed;
-        [SerializeField]
-        private float _wave;
-        [SerializeField]
-        private float _height;
+        private float _waterLine;
         public float Buoyancy => _buoyancy;
         public float WaterLine => _waterLine;
+        public float Drag => _drag;
 
         public float GetWaterLine(Vector3 worldPosition)
         {
@@ -26,7 +27,7 @@ namespace ML
             var local = worldPosition;
             var y1 = Mathf.Sin((local.x+Time.timeSinceLevelLoad*_speed)*_wave)*_height;
             var y2 = Mathf.Cos((local.z+Time.timeSinceLevelLoad*_speed)*_wave)*_height;
-            return (y1+y2)/2;
+            return (y1+y2)/2+_waterLine;
         }
         private void Awake()
         {
@@ -51,7 +52,7 @@ namespace ML
                     float z = -10 + j*20f/count;
                     var y1 = Mathf.Sin((x+Time.timeSinceLevelLoad*_speed)*_wave)*_height;
                     var y2 = Mathf.Cos((z+Time.timeSinceLevelLoad*_speed)*_wave)*_height;
-                    Vector3 pos = new Vector3(x, (y1+y2)/2, z);
+                    Vector3 pos = new Vector3(x, (y1+y2)/2+_waterLine, z);
                     Gizmos.color = Color.green;
                     Gizmos.DrawSphere(pos,0.1f);
                 }
