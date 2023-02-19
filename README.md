@@ -1,2 +1,2 @@
 # Buoyancy_Unity
-physics buoyancy simulation in unity
+simple physics buoyancy simulation in unity
