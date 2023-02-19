@@ -5,19 +5,14 @@ Shader "ML/SimpleWater"
 {
 	Properties
 	{
-		[TCP2HeaderHelp(Base)]
 		_Color ("Color", Color) = (1,1,1,1)
-		[TCP2ColorNoAlpha] _HColor ("Highlight Color", Color) = (0.75,0.75,0.75,1)
-		[TCP2ColorNoAlpha] _SColor ("Shadow Color", Color) = (0.2,0.2,0.2,1)
+		_HColor ("Highlight Color", Color) = (0.75,0.75,0.75,1)
+		_SColor ("Shadow Color", Color) = (0.2,0.2,0.2,1)
 		_MainTex ("Albedo", 2D) = "white" {}
-		[TCP2Separator]
-
-		[TCP2Header(Ramp Shading)]
+		
 		_RampThreshold ("Threshold", Range(0.01,1)) = 0.5
 		_RampSmoothing ("Smoothing", Range(0.001,1)) = 0.5
-		[TCP2Separator]
 		
-		[TCP2HeaderHelp(Vertex Waves Animation)]
 		_WavesSpeed ("Speed", Float) = 2
 		_WavesHeight ("Height", Float) = 0.1
 		_WavesFrequency ("Frequency", Range(0,10)) = 1

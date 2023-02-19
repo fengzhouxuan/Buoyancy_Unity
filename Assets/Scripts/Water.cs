@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ML
@@ -19,13 +20,44 @@ namespace ML
         [SerializeField]
         [Min(0)]
         private float _height=0.4f;
-        
         private Transform _transform;
         private float _waterLine;
+        [SerializeField]
+        private Material _material;
+        
+        private static readonly int WavesSpeedPropertyID = Shader.PropertyToID("_WavesSpeed");
+        private static readonly int WavesHeightPropertyID = Shader.PropertyToID("_WavesHeight");
+        private static readonly int WavesFrequencyPropertyID = Shader.PropertyToID("_WavesFrequency");
         public float Buoyancy => _buoyancy;
         public float WaterLine => _waterLine;
         public float Drag => _drag;
 
+        public float Height
+        {
+            set
+            {
+                _height = value;
+                RefreshWaterMat();
+            }
+        }
+
+        public float Wave
+        {
+            set
+            {
+                _wave = value;
+                RefreshWaterMat();
+            }
+        }
+
+        public float Speed
+        {
+            set
+            {
+                _speed = value;
+                RefreshWaterMat();
+            }
+        }
         public float GetWaterLine(Vector3 worldPosition)
         {
             float x = worldPosition.x;
@@ -39,7 +71,18 @@ namespace ML
             _transform = transform;
             _waterLine = _transform.position.y;
         }
-        
+
+        private void RefreshWaterMat()
+        {
+            _material.SetFloat(WavesSpeedPropertyID,_speed);
+            _material.SetFloat(WavesHeightPropertyID,_height);
+            _material.SetFloat(WavesFrequencyPropertyID,_wave);
+        }
+        private void OnValidate()
+        {
+            RefreshWaterMat();
+        }
+
         private void OnDrawGizmos()
         {
             int count = 50;

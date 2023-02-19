@@ -29,7 +29,7 @@ Material:
     - _RampSmoothing: 1
     - _RampThreshold: 0.228
     - _WavesFrequency: 1
-    - _WavesHeight: 0.1
+    - _WavesHeight: 0.2
     - _WavesSpeed: 1
     - __dummy__: 0
     m_Colors:
