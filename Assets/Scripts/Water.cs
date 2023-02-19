@@ -5,14 +5,19 @@ namespace ML
     public class Water : MonoBehaviour
     {
         [SerializeField]
+        [Range(0,10)]
         private float _buoyancy = 4;
-
-        [SerializeField] private float _drag = 0.5f;
+        
+        [SerializeField]
+        [Min(0)]
+        private float _drag = 0.5f;
         [SerializeField]
         private float _speed=1;
         [SerializeField]
+        [Min(0)]
         private float _wave=1;
         [SerializeField]
+        [Min(0)]
         private float _height=0.4f;
         
         private Transform _transform;

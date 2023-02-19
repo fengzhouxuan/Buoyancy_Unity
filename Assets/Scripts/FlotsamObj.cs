@@ -11,6 +11,7 @@ namespace ML
         private Rigidbody _rigidbody;
         private bool _inWater;
         private Water _water;
+        [Min(0.1f)]
         [SerializeField] private float _voxelSize = 0.2f;
 
         private void Awake()
